@@ -20,3 +20,6 @@ const files = await res.files() // Promise<Web3File[]>
 for (const file of files) {
   console.log(`${file.cid} ${file.name} ${file.size}`)
 }
+
+					<div className="flex pd-12 flex-row-reverse mr-5">
+//

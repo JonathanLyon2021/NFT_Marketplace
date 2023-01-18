@@ -7,6 +7,7 @@ import { nftAddress, nftMarketAddress } from "../config";
 import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import { ToastContainer, toast } from "react-toastify";
+import styles from "../styles/CreateItem.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateItem() {
@@ -14,7 +15,6 @@ export default function CreateItem() {
 	const apiKey =
 		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGUwZGY2N0QwMDE3MjVlMDNGNzk1MzRBODVGNWJiYTVBYjE2Y2M2YTYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MjYwMTEzNDcwMSwibmFtZSI6Im5obFRvcFNoZWxmIn0.TR6Sb2qeZI-svNnSLbW7u7CTwRXwDOxKtRKVk4l0hhc";
 	const client = new NFTStorage({ token: apiKey });
-	// const fileInput = document.querySelector('input[type="file"]');
 	const [fileUrl, setFileUrl] = useState(null);
 	const [formInput, updateFormInput] = useState({
 		price: "",
@@ -23,11 +23,8 @@ export default function CreateItem() {
 	});
 	const [nftTransactionHash, setNftTransactionHash] = useState("");
 	const [marketTransactionHash, setMarketTransactionHash] = useState("");
-
 	const [isTransacting, setIsTransacting] = useState(false);
-	//const buttonText = "Create Digital Asset"
 	const [isLoading, setIsLoading] = useState(false);
-
 	const router = useRouter();
 
 	async function onChange() {
@@ -48,17 +45,17 @@ export default function CreateItem() {
 
 	//creates item and saves it to ipfs
 	async function createItem() {
+		setIsLoading(true);
 		const { name, description, price } = formInput;
-		if (!name || !description || !price || !fileUrl) return;
+		if (!name || !description || !price || !fileUrl){
+			let blankMessage = "Please fill out all fields";
+			toast.error(blankMessage, {
+				theme: "dark",
+			});
+		};
 
 		try {
 			const { name, type } = fileUpload.current.files[0];
-			console.log(
-				"new File:",
-				new File(fileUpload.current.files, name, {
-					type,
-				})
-			);
 			const metadata = await client.store({
 				name,
 				description,
@@ -71,12 +68,11 @@ export default function CreateItem() {
 			});
 			const link = metadata.url.split("ipfs://")[1];
 			const url = `https://nftstorage.link/ipfs/${link}`;
-			console.log("url:", url);
 			createSale(url);
-			//setTimeout(disableFunction("createButton"), 1);
+			setIsLoading(false);
 		} catch (e) {
 			console.log("Error uploading file: ", e);
-			let errorMessage = "";
+			let errorMessage = "Error uploading file";
 			if (e.message.includes("user rejected transaction")) {
 				errorMessage = "User rejected transaction";
 			}
@@ -101,8 +97,8 @@ export default function CreateItem() {
 			let tx = await transaction.wait();
 
 			console.log("tx:", tx);
+			console.log("tx.gasUsed:", tx.gasUsed.toString());
 			if (tx.byzantium == true) {
-				console.log("txHash:", tx.transactionHash);
 				setNftTransactionHash(tx.transactionHash);
 				toast.success("NFT created successfully", {
 					theme: "colored",
@@ -112,8 +108,8 @@ export default function CreateItem() {
 			let value = event.args[2];
 			let tokenId = value.toNumber();
 			const price = ethers.utils
-				.parseUnits(formInput.price, "ether");
-				//.toString();
+				.parseUnits(formInput.price, "ether")
+				.toString();
 
 			contract = new ethers.Contract(
 				nftMarketAddress,
@@ -133,15 +129,13 @@ export default function CreateItem() {
 			);
 
 			const marketTx = await transaction.wait();
-			console.log("marketTx:", marketTx);
-
-			//router.push("/");
 			if (marketTx.byzantium == true) {
 				setMarketTransactionHash(marketTx.transactionHash);
 				toast.success("Market Item Created successfully", {
 					theme: "colored",
 				});
 			}
+			setIsLoading(false);
 		} catch (e) {
 			console.log("Error:", e);
 			setIsTransacting(false);
@@ -163,6 +157,7 @@ export default function CreateItem() {
 
 	return (
 		<>
+		
 			<ToastContainer position="top-center" pauseOnFocusLoss={false} />
 			{!isTransacting ? (
 				<div className="flex justify-center">
@@ -214,40 +209,39 @@ export default function CreateItem() {
 						<button
 							onClick={createItem}
 							className={
-								isLoading
-									? "font-bold mt-4 bg-purple-500 text-white rounded p-4 shadow-lg"
-									: "font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg"
+									 "font-bold mt-4 bg-purple-500 text-white rounded p-4 shadow-lg"
 							}
-							disabled={isLoading}
 						>
-							{isLoading ? "Loading..." : "Create Digital Asset"}
+						Create Digital Asset
 						</button>
 					</div>
-
 					<p className="text-4xl font-bold">Create an NFT</p>
 				</div>
 			) : (
-				// Transaction Hashes
 				<div>
-					<div className="flex pd-12 flex-row-reverse mr-5">
-						<button
+						
+					{nftTransactionHash && (
+						<div className="flex flex-col mt-2 border rounded p-4 flex-row-reverse">
+							<div>
+							<button
 							onClick={handleButtonClick}
-							className="border rounded px-4 py-2 bg-purple-500 text-white font-bold"
+							className="border rounded px-4 py-3 bg-purple-600 text-white font-bold flex justify-right"
 						>
 							Back to home
 						</button>
-					</div>
-					{nftTransactionHash && (
-						<div className="flex flex-col mt-2 border rounded p-4">
-							<h3>Transaction Receipts</h3>
-							<p>View your Transactions on Etherscan:</p>
+						</div>
+							<h1 className="flex justify-center"><font color="purple"><b>Transaction Receipts</b></font></h1>
+							<p className="flex justify-center"><strong>View your Transactions on Etherscan:</strong></p>
+							<br></br>
 							{nftTransactionHash && (
 								<p>
 									<a
 										href={`https://goerli.etherscan.io/tx/${nftTransactionHash}`}
 										target="_blank"
 									>
-										{`NFT transaction receipt: ${nftTransactionHash}`}
+										<strong>NFT transaction receipt: </strong><font color="blue">{` ${nftTransactionHash}`}</font>
+										<br></br>
+										<br></br>
 									</a>
 								</p>
 							)}
@@ -257,7 +251,7 @@ export default function CreateItem() {
 										href={`https://goerli.etherscan.io/tx/${marketTransactionHash}`}
 										target="_blank"
 									>
-										{`Market transaction receipt: ${marketTransactionHash}`}
+										<strong>Market transaction receipt: </strong><font color="blue">{` ${marketTransactionHash}`} </font>
 									</a>
 								</p>
 							)}
@@ -265,23 +259,18 @@ export default function CreateItem() {
 					)}
 
 					{/* Transaction Instructions/Steps */}
-					<div className="m-10">
-						<h1>Transaction in progress. Please wait...</h1>
-						<h3>Step 1</h3>
-						<p>
-							Confim wallet transaction in order to create the NFT
-						</p>
-						<h3>Step 2</h3>
-						<p>
-							Optional: Confirm wallet transaction in order to
-							list NFT in Marketplace
-						</p>
-						<h3>Step 3</h3>
-						<p>Wait for transaction to be mined...</p>
-						<h3>Step 4</h3>
-						<p>Optional: Review transaction on Etherscan</p>
+						<h1 className="flex justify-center"><b>Transaction in progress. Please wait...</b></h1>
+						<div className={nftTransactionHash ?  undefined : styles.loading}>
+						</div>
+						<h1 className="flex justify-center"><b>Step 1 :</b><font>   Confim wallet transaction in order to create the NFT</font></h1>
+						<br></br>
+						<h1 className="flex justify-center"><b>Step 2 :</b><font>(Optional) Confirm wallet transaction in order to
+							list NFT in the Marketplace</font></h1>
+						<br></br>
+						<h1 className="flex justify-center"><b>Step 3 :</b><font>Wait for transaction to be mined...</font></h1>
+						<br></br>
+						<h1 className="flex justify-center"><b>Step 4 :</b><font>(Optional) Review transaction on Etherscan by clicking on the transaction hashes. Both of which are highlighted above in blue!</font></h1>
 					</div>
-				</div>
 			)}
 		</>
 	);

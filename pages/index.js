@@ -8,6 +8,7 @@ import Market from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
+import "./create-item.js";
 
 export default function Home() {
 	const [nfts, setNfts] = useState([]);
