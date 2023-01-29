@@ -15,6 +15,7 @@ export default function Home() {
 	const [loadingState, setLoadingState] = useState("not-loaded");
 
 	useEffect(() => {
+		console.log("useEffect");
 		loadNFTs();
 	}, []);
 
@@ -41,6 +42,7 @@ export default function Home() {
 				const tokenId = Number(i.itemId.toString());
 				const tokenUri = await tokenContract.tokenURI(tokenId);
 				const meta = await axios.get(tokenUri);
+				console.log("meta", meta);
 				let price = ethers.utils.formatUnits(
 					i.price.toString(),
 					"ether"
@@ -58,6 +60,7 @@ export default function Home() {
 					name: meta.data.name,
 					description: meta.data.description,
 				};
+				console.log("item", item);
 				return item;
 			})
 		);
@@ -79,17 +82,16 @@ export default function Home() {
 			signer
 		);
 		const price = ethers.utils.parseUnits(nft.price, "ether").toString();
-		console.log("typeof", typeof(price))
+		console.log("typeof", typeof price);
 		console.log("price", price);
 		console.log("nft.tokenId", nft.tokenId);
 
 		const transaction = await contract.createMarketSale(
 			nftAddress,
-			nft.tokenId,
+			nft.itemId,
 			{
 				value: price,
 			}
-
 		);
 		await transaction.wait();
 		loadNFTs(); //this should show the nft's that are not sold, technically speaking, "still available to purchase"

@@ -8,14 +8,14 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract NFT is ERC721URIStorage {
     using Counters for Counters.Counter; 
-    Counters.Counter private _tokenIds; //the _tokenId is a counter that gives the token a unique id when minted.
-    //*Using counters will allow us to increment the tokenID
+    Counters.Counter private _tokenIds; /// @notice the _tokenId is a counter that gives the token a unique id when minted.
+    /// @notice Using counters will allow us to increment the tokenID, using the Counters library
     address contractAddress;
 
     constructor(address marketplaceAddress) ERC721("Metaverse", "Mett") {
         contractAddress = marketplaceAddress;
-        //* When we deploy this contract we need to pass in the address of the marketplace 
-        //*First we deploy the market and second we deploy the NFT Contract
+        /// @dev When we deploy this contract we need to pass in the address of the marketplace 
+        /// @notice First we deploy the market and second we deploy the NFT Contract
     }
 
     function createToken(string memory tokenURI) public returns (uint) {
@@ -28,6 +28,6 @@ contract NFT is ERC721URIStorage {
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
         setApprovalForAll(contractAddress, true);
-        return newItemId; //*Token Id so we can use that to set it for sale on the market
+        return newItemId; /// @notice Token Id so we can use that to set it for sale on the market
     }
 }

@@ -11,7 +11,10 @@ import styles from "../styles/CreateItem.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateItem() {
+	console.log("nftAddress", nftAddress);
+	console.log("nftMarketAddress", nftMarketAddress);
 	const fileUpload = useRef(null);
+	console.log("fileUpload", fileUpload);
 	const apiKey =
 		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGUwZGY2N0QwMDE3MjVlMDNGNzk1MzRBODVGNWJiYTVBYjE2Y2M2YTYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MjYwMTEzNDcwMSwibmFtZSI6Im5obFRvcFNoZWxmIn0.TR6Sb2qeZI-svNnSLbW7u7CTwRXwDOxKtRKVk4l0hhc";
 	const client = new NFTStorage({ token: apiKey });
@@ -33,7 +36,8 @@ export default function CreateItem() {
 			setFileUrl(url);
 		} catch (e) {
 			console.log("Error:", e);
-			let errorMessage = "";
+			let errorMessage = e.message;
+
 			if (e.message.includes("user rejected transaction")) {
 				errorMessage = "User rejected transaction";
 			}
@@ -47,19 +51,19 @@ export default function CreateItem() {
 	async function createItem() {
 		setIsLoading(true);
 		const { name, description, price } = formInput;
-		if (!name || !description || !price || !fileUrl){
+		if (!name || !description || !price || !fileUrl) {
 			let blankMessage = "Please fill out all fields";
 			toast.error(blankMessage, {
 				theme: "dark",
 			});
-		};
+		}
 
 		try {
-			const { name, type } = fileUpload.current.files[0];
+			const { fileName, type } = fileUpload.current.files[0];
 			const metadata = await client.store({
 				name,
 				description,
-				image: new File(fileUpload.current.files, name, {
+				image: new File(fileUpload.current.files, fileName, {
 					type,
 				}),
 				properties: {
@@ -72,7 +76,7 @@ export default function CreateItem() {
 			setIsLoading(false);
 		} catch (e) {
 			console.log("Error uploading file: ", e);
-			let errorMessage = "Error uploading file";
+			let errorMessage = e.message;
 			if (e.message.includes("user rejected transaction")) {
 				errorMessage = "User rejected transaction";
 			}
@@ -88,6 +92,8 @@ export default function CreateItem() {
 		const connection = await web3Modal.connect();
 		const provider = new ethers.providers.Web3Provider(connection);
 		const signer = provider.getSigner();
+
+		console.log("nftAddress", nftAddress);
 
 		let contract = new ethers.Contract(nftAddress, NFT.abi, signer);
 		try {
@@ -157,7 +163,6 @@ export default function CreateItem() {
 
 	return (
 		<>
-		
 			<ToastContainer position="top-center" pauseOnFocusLoss={false} />
 			{!isTransacting ? (
 				<div className="flex justify-center">
@@ -209,29 +214,36 @@ export default function CreateItem() {
 						<button
 							onClick={createItem}
 							className={
-									 "font-bold mt-4 bg-purple-500 text-white rounded p-4 shadow-lg"
+								"font-bold mt-4 bg-purple-500 text-white rounded p-4 shadow-lg"
 							}
 						>
-						Create Digital Asset
+							Create Digital Asset
 						</button>
 					</div>
 					<p className="text-4xl font-bold">Create an NFT</p>
 				</div>
 			) : (
 				<div>
-						
 					{nftTransactionHash && (
 						<div className="flex flex-col mt-2 border rounded p-4 flex-row-reverse">
 							<div>
-							<button
-							onClick={handleButtonClick}
-							className="border rounded px-4 py-3 bg-purple-600 text-white font-bold flex justify-right"
-						>
-							Back to home
-						</button>
-						</div>
-							<h1 className="flex justify-center"><font color="purple"><b>Transaction Receipts</b></font></h1>
-							<p className="flex justify-center"><strong>View your Transactions on Etherscan:</strong></p>
+								<button
+									onClick={handleButtonClick}
+									className="border rounded px-4 py-3 bg-purple-600 text-white font-bold flex justify-right"
+								>
+									Back to home
+								</button>
+							</div>
+							<h1 className="flex justify-center">
+								<font color="purple">
+									<b>Transaction Receipts</b>
+								</font>
+							</h1>
+							<p className="flex justify-center">
+								<strong>
+									View your Transactions on Etherscan:
+								</strong>
+							</p>
 							<br></br>
 							{nftTransactionHash && (
 								<p>
@@ -239,7 +251,10 @@ export default function CreateItem() {
 										href={`https://goerli.etherscan.io/tx/${nftTransactionHash}`}
 										target="_blank"
 									>
-										<strong>NFT transaction receipt: </strong><font color="blue">{` ${nftTransactionHash}`}</font>
+										<strong>
+											NFT transaction receipt:{" "}
+										</strong>
+										<font color="blue">{` ${nftTransactionHash}`}</font>
 										<br></br>
 										<br></br>
 									</a>
@@ -251,7 +266,12 @@ export default function CreateItem() {
 										href={`https://goerli.etherscan.io/tx/${marketTransactionHash}`}
 										target="_blank"
 									>
-										<strong>Market transaction receipt: </strong><font color="blue">{` ${marketTransactionHash}`} </font>
+										<strong>
+											Market transaction receipt:{" "}
+										</strong>
+										<font color="blue">
+											{` ${marketTransactionHash}`}{" "}
+										</font>
 									</a>
 								</p>
 							)}
@@ -259,18 +279,44 @@ export default function CreateItem() {
 					)}
 
 					{/* Transaction Instructions/Steps */}
-						<h1 className="flex justify-center"><b>Transaction in progress. Please wait...</b></h1>
-						<div className={nftTransactionHash ?  undefined : styles.loading}>
-						</div>
-						<h1 className="flex justify-center"><b>Step 1 :</b><font>   Confim wallet transaction in order to create the NFT</font></h1>
-						<br></br>
-						<h1 className="flex justify-center"><b>Step 2 :</b><font>(Optional) Confirm wallet transaction in order to
-							list NFT in the Marketplace</font></h1>
-						<br></br>
-						<h1 className="flex justify-center"><b>Step 3 :</b><font>Wait for transaction to be mined...</font></h1>
-						<br></br>
-						<h1 className="flex justify-center"><b>Step 4 :</b><font>(Optional) Review transaction on Etherscan by clicking on the transaction hashes. Both of which are highlighted above in blue!</font></h1>
-					</div>
+					<h1 className="flex justify-center">
+						<b>Transaction in progress. Please wait...</b>
+					</h1>
+					<div
+						className={
+							nftTransactionHash ? undefined : styles.loading
+						}
+					></div>
+					<h1 className="flex justify-center">
+						<b>Step 1 :</b>
+						<font>
+							{" "}
+							Confim wallet transaction in order to create the NFT
+						</font>
+					</h1>
+					<br></br>
+					<h1 className="flex justify-center">
+						<b>Step 2 :</b>
+						<font>
+							(Optional) Confirm wallet transaction in order to
+							list NFT in the Marketplace
+						</font>
+					</h1>
+					<br></br>
+					<h1 className="flex justify-center">
+						<b>Step 3 :</b>
+						<font>Wait for transaction to be mined...</font>
+					</h1>
+					<br></br>
+					<h1 className="flex justify-center">
+						<b>Step 4 :</b>
+						<font>
+							(Optional) Review transaction on Etherscan by
+							clicking on the transaction hashes. Both of which
+							are highlighted above in blue!
+						</font>
+					</h1>
+				</div>
 			)}
 		</>
 	);

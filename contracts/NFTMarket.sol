@@ -11,8 +11,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
 
-    address payable owner;
-    uint256 listingPrice = 0.025 ether;
+    address payable owner; /// @notice makes a commission on every item sold
+    uint256 listingPrice = 0.025 ether; /// @notice listing price is 0.025 goerli ether
 
     constructor() {
       owner = payable(msg.sender);
@@ -28,6 +28,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
       bool sold;
     }
 
+  /// @notice mapping from itemId to MarketItem
     mapping(uint256 => MarketItem) private idToMarketItem;
 
     event MarketItemCreated (
@@ -40,16 +41,30 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
       bool sold
     );
 
-    /* Returns the listing price of the contract */
+    /// @dev Returns the listing price of the contract 
     function getListingPrice() public view returns (uint256) {
       return listingPrice;
     }
 
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can do this");
+        _;
+    }
+  
+    function getOwner() external view onlyOwner returns (address) {
+        return owner;
+    }
+
+    function getOwnerBalance() external view onlyOwner returns (uint256) {
+        return owner.balance;
+    }
+
+  /// @dev This function places an item for sale on the market place
     function createMarketItem(
       address nftContract,
       uint256 tokenId,
       uint256 price
-    ) public payable {
+    ) public payable nonReentrant {
       require(price > 0, "Price must be at least 1 wei");
       require(msg.value == listingPrice, "Price must be equal to listing price");
 
@@ -66,6 +81,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
         false
       );
 
+    /// @notice transfers ownership of the token to the marketplace
       IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
       emit MarketItemCreated(
         itemId,
@@ -78,12 +94,12 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
       );
     }
 
-    /* Creates the sale of a marketplace item */
-    /* Transfers ownership of the item, as well as funds between parties */
+    /// @dev Creates the sale of a marketplace item 
+    /// @notice Transfers ownership of the item, as well as funds between parties 
     function createMarketSale(
       address nftContract,
       uint256 itemId
-      ) public payable {
+      ) public payable nonReentrant {
       uint price = idToMarketItem[itemId].price;
       uint tokenId = idToMarketItem[itemId].tokenId;
       require(msg.value == price, "Please submit the asking price in order to complete the purchase");
