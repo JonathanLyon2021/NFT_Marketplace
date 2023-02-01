@@ -12,16 +12,18 @@ let marketAddress;
 let nftContractAddress;
 
 async function createNFT(sender) {
-  const token = await nft
-    .connect(sender)
-    .createToken("https://www.mytokenlocation.com");
+  const token = await nft  //how are we awaiting the contract? no contracts are imported in this file
+    .connect(sender) //ethers function butwe are not importing ethers in this file
+    .createToken("https://www.mytokenlocation.com"); // function? and url?
   tx = await token.wait();
   let event = tx.events[0]; // console all this stuff and understand
+  // console.log("event", event);
   let value = event.args[2];
-  return (tokenId = value.toNumber()); //tokenId
+  // console.log("value", value);
+  return (tokenId = value.toNumber()); //tokenId must be on the contrac 
 }
 
-async function createMarketItem(
+async function createMarketItem( // () coming from the contract
   nftAddress,
   tokenId,
   auctionPrice, 
@@ -35,11 +37,11 @@ async function createMarketItem(
     });
 }
 
-function etherToWei(ether) {
+function etherToWei(ether) {   
   return ethers.utils.parseEther(ether).toString();
 }
 
-function askingPriceToWei(etherAmount) {
+function askingPriceToWei(etherAmount) { 
   let price = ethers.utils.parseEther(etherAmount);
   return (price = price.toString());
 }
@@ -54,7 +56,7 @@ beforeEach(async () => {
     nft = await NFT.deploy(marketAddress);
     nft = await nft.deployed();
     nftContractAddress = nft.address;
-    [owner, addr1, addr2] = await ethers.getSigners();
+    [owner, addr1, addr2, addr3] = await ethers.getSigners();
   });
   
   describe("NFT Market Deployment", function () {
@@ -236,43 +238,6 @@ beforeEach(async () => {
       expect(newOwner).to.eq(addr1.address);
     });
   
-    // it("Should update the item owner within the marketplace.", async function () {
-    //   // Create a market sale
-    //   let tx = await market
-    //     .connect(addr2)
-    //     .createMarketSale(nftContractAddress, tokenId, {
-    //       value: auctionPrice,
-    //     });
-  
-    //   // Mine the transaction
-    //   tx = await tx.wait();
-  
-    //   // Determine the sold status of the item
-    //   let events = tx.events;
-    //   let event = tx.events[events.length - 1];
-    //   let owner = event.args.owner;
-  
-    //   expect(owner).to.eq(addr2.address);
-    // });
-  
-    // it("Should marked the item as sold", async function () {
-    //   // Create a market sale
-    //   let tx = await market
-    //     .connect(addr2)
-    //     .createMarketSale(nftContractAddress, tokenId, {
-    //       value: auctionPrice,
-    //     });
-  
-    //   // Mine the transaction
-    //   tx = await tx.wait();
-  
-    //   // Determine the sold status of the item
-    //   let events = tx.events;
-    //   let event = tx.events[events.length - 1];
-    //   let sold = event.args.sold;
-  
-    //   expect(sold).to.eq(true);
-    // });
   
     it("Should provide the listing Fee to the marketplace contract owner", async function () {
       // Determine the balance of the marketplace contract owner
@@ -295,23 +260,6 @@ beforeEach(async () => {
         .toString();
     });
   
-//     it("Should emit a MarketItemStatus event", async function () {
-//       // Create a market sale
-//       let tx = await market
-//         .connect(addr2)
-//         .createMarketSale(nftContractAddress, tokenId, {
-//           value: auctionPrice,
-//         });
-  
-//       // Mine the transaction
-//       tx = await tx.wait();
-  
-//       // Determine the sold status of the item
-//       let events = tx.events;
-//       let event = events[events.length - 1].event;
-  
-//       expect(event).to.eq("MarketItemStatus");
-//     });
   });
   
   describe("Returning marketplace items", function () {

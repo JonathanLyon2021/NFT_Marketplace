@@ -15,34 +15,37 @@ export default function Home() {
 	const [loadingState, setLoadingState] = useState("not-loaded");
 
 	useEffect(() => {
-		console.log("useEffect");
 		loadNFTs();
 	}, []);
 
 	async function loadNFTs() {
-		const INFURA_PROJECT_ID = "460a2af81be44b31aed0e928f26cbc53";
+		//const provider = new ethers.providers.JsonRpcProvider(); //used for local hardhat
+		const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 		const infuraProvider = new providers.InfuraProvider(
 			"goerli",
 			INFURA_PROJECT_ID
-		); //why dont we need like infura provider method? : ask J
+		); 
 		const tokenContract = new ethers.Contract(
 			nftAddress,
 			NFT.abi,
 			infuraProvider
+			//provider
 		);
 		const marketContract = new ethers.Contract(
 			nftMarketAddress,
 			Market.abi,
 			infuraProvider
+			//provider
 		);
 		const data = await marketContract.fetchMarketItems();
 		//this is a json representation from ipfs for instanceof(description, image, name, etc.)
 		const items = await Promise.all(
 			data.map(async (i) => {
-				const tokenId = Number(i.itemId.toString());
+				const itemId = Number(i.itemId.toString());
+
+				const tokenId = Number(i.tokenId.toString());
 				const tokenUri = await tokenContract.tokenURI(tokenId);
 				const meta = await axios.get(tokenUri);
-				console.log("meta", meta);
 				let price = ethers.utils.formatUnits(
 					i.price.toString(),
 					"ether"
@@ -52,6 +55,7 @@ export default function Home() {
 
 				//We are mapping over the items array, setting this stuff to the item.
 				let item = {
+					itemId,
 					price,
 					tokenId: i.tokenId.toNumber(),
 					seller: i.seller,
@@ -60,7 +64,6 @@ export default function Home() {
 					name: meta.data.name,
 					description: meta.data.description,
 				};
-				console.log("item", item);
 				return item;
 			})
 		);
@@ -75,17 +78,12 @@ export default function Home() {
 		const provider = new ethers.providers.Web3Provider(connection);
 
 		const signer = provider.getSigner();
-		console.log("signer: ", signer);
 		const contract = new ethers.Contract(
 			nftMarketAddress,
 			Market.abi,
 			signer
 		);
-		const price = ethers.utils.parseUnits(nft.price, "ether").toString();
-		console.log("typeof", typeof price);
-		console.log("price", price);
-		console.log("nft.tokenId", nft.tokenId);
-
+		const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
 		const transaction = await contract.createMarketSale(
 			nftAddress,
 			nft.itemId,
@@ -117,8 +115,8 @@ export default function Home() {
 									alt="nft"
 									src={nft.image}
 									style={{
-										width: "450px",
-										height: "250px",
+										width: "350px",
+										height: "350px",
 										objectFit: "cover",
 									}}
 									width={350}
@@ -126,20 +124,17 @@ export default function Home() {
 								/>
 								<div className="p-4">
 									<p
-										style={{ height: "64px" }}
+										style={{ height: "30px" }}
 										className="text-2xl font-semibold"
 									>
 										{nft.name}
 									</p>
 									<div
-										style={{
-											height: "70px",
-											//overflow: "hidden",
-										}}
+										
 									>
-										<p className="text-gray-400">
+										<div className="text-gray-400" style={{height:"10px"}}>
 											{nft.description}
-										</p>
+										</div>
 									</div>
 								</div>
 								<div className="p-4 bg-black">

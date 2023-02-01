@@ -47,70 +47,7 @@ export default function MyAssets() {
 			setNfts(items)
 			setLoadingState('loaded') // set the loading state to loaded
 		}
-		// async function sellNFT(nft) {
-		// 	const web3Modal = new Web3Modal();
-		// 	const connection = await web3Modal.connect();
-		// 	const provider = new ethers.providers.Web3Provider(connection);
-		// 	const signer = provider.getSigner();
-		
-		// 	const tokenId = nft.tokenId;
-		// 	console.log("id", nft.contractId);
-		// 	console.log("salePrice", salePrice);
-		// 	console.log("price", nft.price);
-		
-		// 	const price = ethers.utils.parseUnits(salePrice, "ether").toString();
-		
-		// 	try {
-		// 	  const marketContract = new ethers.Contract(
-		// 		dogMarketAddress,
-		// 		DogMarket.abi,
-		// 		signer
-		// 	  );
-		
-		// 	  const tokenContract = new ethers.Contract(
-		// 		dogTokenAddress,
-		// 		DogToken.abi,
-		// 		signer
-		// 	  );
-		
-		//  //approve the market contract to transfer the NFT
-		//  const approveTx = await tokenContract.approve(dogMarketAddress, tokenId);
-		//  await approveTx.wait();
-		
-		// 	  let commissionFee = await marketContract.getCommissionFee();
-		// 	  commissionFee = commissionFee.toString();
-		
-		// 	  const transaction = await marketContract.sellMyNFT(
-		// 		dogTokenAddress,
-		// 		tokenId,
-		// 		price,
-		// 		{
-		// 		  value: commissionFee,
-		// 		}
-		// 	  );
-		// 	  console.log("transaction", transaction);
-		
-		// 	  const marketTx = await transaction.wait();
-		// 	  if (marketTx.byzantium == true) {
-		// 		setMarketTransactionHash(marketTx.transactionHash);
-		// 		toast.success("Market Item Created successfully", {
-		// 		  theme: "colored",
-		// 		});
-		// 	  }
-		// 	} catch (e) {
-		// 	  console.log("Error:", e);
-		// 	  setIsTransacting(false);
-		// 	  setIsLoading(false);
-		// 	  let errorMessage = "";
-		// 	  if (e.message.includes("user rejected transaction")) {
-		// 		errorMessage = "User rejected transaction";
-		// 	  }
-		// 	  toast.error(errorMessage, {
-		// 		theme: "colored",
-		// 	  });
-		// 	}
-		// 	loadNFTs();
-		//   }
+
 		if(loadingState === 'loaded' && !nfts.length) return (
 			<h1 className="px-20 py-10 text-3xl">No assets owned</h1>
 		)
@@ -121,10 +58,12 @@ export default function MyAssets() {
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
 					{ nfts.map((nft, i) => (
 						<div key={i} className="border shadow rounded-xl overflow-hidden">
-							<img src={nft.image} className="rounded" />
+							<img src={nft.image} className="rounded overflow-hidden" alt="nft" style={{width: 350, height:450}}/>
 							<div className="p-4 bg-black">
 								<p className="text-2xl font-bold text-white">Price - {nft.price} Eth</p>
+								
 							</div>
+							
 						</div>
 					))
 					}

@@ -9,14 +9,11 @@ import Market from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import { ToastContainer, toast } from "react-toastify";
 import styles from "../styles/CreateItem.module.css";
 import "react-toastify/dist/ReactToastify.css";
+//import dotenv from "dotenv";
 
 export default function CreateItem() {
-	console.log("nftAddress", nftAddress);
-	console.log("nftMarketAddress", nftMarketAddress);
 	const fileUpload = useRef(null);
-	console.log("fileUpload", fileUpload);
-	const apiKey =
-		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGUwZGY2N0QwMDE3MjVlMDNGNzk1MzRBODVGNWJiYTVBYjE2Y2M2YTYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MjYwMTEzNDcwMSwibmFtZSI6Im5obFRvcFNoZWxmIn0.TR6Sb2qeZI-svNnSLbW7u7CTwRXwDOxKtRKVk4l0hhc";
+	const apiKey = dotenv.process.env.API_KEY;
 	const client = new NFTStorage({ token: apiKey });
 	const [fileUrl, setFileUrl] = useState(null);
 	const [formInput, updateFormInput] = useState({
@@ -47,7 +44,7 @@ export default function CreateItem() {
 		}
 	}
 
-	//creates item and saves it to ipfs
+	//creates item and saves it to ipfs(nft.storage)
 	async function createItem() {
 		setIsLoading(true);
 		const { name, description, price } = formInput;
@@ -87,24 +84,16 @@ export default function CreateItem() {
 	}
 
 	async function createSale(metadata) {
-		console.log("metadata:", metadata);
 		const web3Modal = new Web3Modal();
 		const connection = await web3Modal.connect();
 		const provider = new ethers.providers.Web3Provider(connection);
 		const signer = provider.getSigner();
-
-		console.log("nftAddress", nftAddress);
-
 		let contract = new ethers.Contract(nftAddress, NFT.abi, signer);
 		try {
 			setIsTransacting(true);
-			setIsLoading(true);
 			let transaction = await contract.createToken(metadata);
 			let tx = await transaction.wait();
-
-			console.log("tx:", tx);
-			console.log("tx.gasUsed:", tx.gasUsed.toString());
-			if (tx.byzantium == true) {
+			if (tx.status == true) {
 				setNftTransactionHash(tx.transactionHash);
 				toast.success("NFT created successfully", {
 					theme: "colored",
@@ -135,17 +124,15 @@ export default function CreateItem() {
 			);
 
 			const marketTx = await transaction.wait();
-			if (marketTx.byzantium == true) {
+			if (marketTx.status == true) {
 				setMarketTransactionHash(marketTx.transactionHash);
 				toast.success("Market Item Created successfully", {
 					theme: "colored",
 				});
 			}
-			setIsLoading(false);
 		} catch (e) {
 			console.log("Error:", e);
 			setIsTransacting(false);
-			setIsLoading(false);
 			let errorMessage = "";
 			if (e.message.includes("user rejected transaction")) {
 				errorMessage = "User rejected transaction";
@@ -286,6 +273,10 @@ export default function CreateItem() {
 						className={
 							nftTransactionHash ? undefined : styles.loading
 						}
+					></div>
+					<div className={
+						marketTransactionHash ? undefined : styles.loading
+					}
 					></div>
 					<h1 className="flex justify-center">
 						<b>Step 1 :</b>

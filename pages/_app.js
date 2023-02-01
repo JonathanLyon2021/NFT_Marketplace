@@ -5,7 +5,7 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<div>
 			<nav className="border-b p-6">
-				<p className="text-4xl font-bold">Metaverse Marketplace</p>
+				<p className="text-4xl font-bold">NHL Top-Shelf Marketplace</p>
 				<div className="flex mt-4">
 					<Link href="/">
 						<button className="mr-6 text-pink-500 focus:outline-none focus:ring focus:ring-violet-300">
@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
 					</Link>
 					<Link href="/my-assets">
 						<button className="mr-6 text-pink-500 focus:outline-none focus:ring focus:ring-violet-300">
-							My Digital Assets
+							Digital Assets in my Wallet
 						</button>
 					</Link>
 					<Link href="/creator-dashboard">

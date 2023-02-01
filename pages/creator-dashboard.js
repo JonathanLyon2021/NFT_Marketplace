@@ -42,7 +42,6 @@ export default function CreatorDashboard() {
 					i.price.toString(),
 					"ether"
 				);
-				console.log("items:", items);
 				let item = {
 					price,
 					tokenId: i.tokenId.toNumber(),
@@ -56,13 +55,11 @@ export default function CreatorDashboard() {
 				return item;
 			})
 		);
-		console.log("items:", items);
 		const soldItems = items.filter((i) => i.sold);
 		setSold(soldItems);
 		setNfts(items);
 		setLoadingState("loaded");
 	}
-	//where is classname rounded comin g from on line 77?
 	return (
 		<div>
 			<div className="p-4">
@@ -111,4 +108,3 @@ export default function CreatorDashboard() {
 	);
 }
 
-//https://ipfs.io/ipfs/bafybeic3amioynpomd47kcv73hhmjhnnw7sdyjmyuowxij24mnn42gskjy/NovemberReign.jpg

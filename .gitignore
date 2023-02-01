@@ -12,6 +12,7 @@
 /.next/
 /out/
 
+
 # production
 /build
 
@@ -57,4 +58,8 @@ typechain-types
 #Hardhat files
 cache
 artifacts
+
+#ignoring file extension type
+hardhat.config.js
+next.config.js
 
