@@ -1,26 +1,14 @@
-# Sample Hardhat Project
+# NFT Marketplace - Dencentralized Application (DApp)
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+<img src="./public/nftMarket1.jpg">
 
-Try running some of the following tasks:
+<!-- ABOUT THE PROJECT -->
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+## About The Project
 
-also these might work
-```
-npx hardhat accounts
-npx hardhat compile
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+Implemented a NFT Marketplace based on a Decentralized Application using Next.js and Goerli testnet.The purpose of this application is to allow users to create digital assets (NFT's), and also afterwards they have the option to put those NFT's on the NFT Marketplace for purchasing.
 
+## What I learned
 
-ie. Hardhat gets us setup with a basic hardhat environment and some basic solidity contracts
+This was my first time implementing Next.js, Tailwind CSS, and Hardhat. Also deploying to the Goerli testnet network was kind of a first because I had already deployed smart contracts on Remix IDE using Goerli network, just never creating NFT's using ipfs. Deploying through Hardhat was a simple process.
+
