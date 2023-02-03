@@ -47,7 +47,6 @@ export default function MyAssets() {
 			setNfts(items)
 			setLoadingState('loaded') // set the loading state to loaded
 		}
-
 		if(loadingState === 'loaded' && !nfts.length) return (
 			<h1 className="px-20 py-10 text-3xl">No assets owned</h1>
 		)
@@ -61,7 +60,6 @@ export default function MyAssets() {
 							<img src={nft.image} className="rounded overflow-hidden" alt="nft" style={{width: 350, height:450}}/>
 							<div className="p-4 bg-black">
 								<p className="text-2xl font-bold text-white">Price - {nft.price} Eth</p>
-								
 							</div>
 							
 						</div>

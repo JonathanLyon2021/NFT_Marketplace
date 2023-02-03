@@ -24,25 +24,24 @@ export default function Home() {
 		const infuraProvider = new providers.InfuraProvider(
 			"goerli",
 			INFURA_PROJECT_ID
-		); 
+		);
 		const tokenContract = new ethers.Contract(
 			nftAddress,
 			NFT.abi,
 			infuraProvider
-			//provider
+			//provider   /used for local hardhat
 		);
 		const marketContract = new ethers.Contract(
 			nftMarketAddress,
 			Market.abi,
 			infuraProvider
-			//provider
+			//provider    /used for local hardhat
 		);
 		const data = await marketContract.fetchMarketItems();
 		//this is a json representation from ipfs for instanceof(description, image, name, etc.)
 		const items = await Promise.all(
 			data.map(async (i) => {
 				const itemId = Number(i.itemId.toString());
-
 				const tokenId = Number(i.tokenId.toString());
 				const tokenUri = await tokenContract.tokenURI(tokenId);
 				const meta = await axios.get(tokenUri);
@@ -76,7 +75,6 @@ export default function Home() {
 		const web3Modal = new Web3Modal();
 		const connection = await web3Modal.connect();
 		const provider = new ethers.providers.Web3Provider(connection);
-
 		const signer = provider.getSigner();
 		const contract = new ethers.Contract(
 			nftMarketAddress,
@@ -117,7 +115,6 @@ export default function Home() {
 									style={{
 										width: "350px",
 										height: "350px",
-										objectFit: "cover",
 									}}
 									width={350}
 									height={350}
@@ -129,10 +126,11 @@ export default function Home() {
 									>
 										{nft.name}
 									</p>
-									<div
-										
-									>
-										<div className="text-gray-400" style={{height:"10px"}}>
+									<div>
+										<div
+											className="text-gray-400"
+											style={{ height: "10px" }}
+										>
 											{nft.description}
 										</div>
 									</div>

@@ -10,16 +10,16 @@ let addr1;
 let addr2; 
 let marketAddress;
 let nftContractAddress;
+const tokenUri = "https://www.mytokenlocation.com";
 
 async function createNFT(sender) {
   const token = await nft  //how are we awaiting the contract? no contracts are imported in this file
     .connect(sender) //ethers function butwe are not importing ethers in this file
-    .createToken("https://www.mytokenlocation.com"); // function? and url?
+    .createToken(tokenUri); // doesnt need to be a legit URL, just needs a url for .createtoken()
+
   tx = await token.wait();
   let event = tx.events[0]; // console all this stuff and understand
-  // console.log("event", event);
   let value = event.args[2];
-  // console.log("value", value);
   return (tokenId = value.toNumber()); //tokenId must be on the contrac 
 }
 
@@ -56,7 +56,7 @@ beforeEach(async () => {
     nft = await NFT.deploy(marketAddress);
     nft = await nft.deployed();
     nftContractAddress = nft.address;
-    [owner, addr1, addr2, addr3] = await ethers.getSigners();
+    [owner, addr1, addr2] = await ethers.getSigners();
   });
   
   describe("NFT Market Deployment", function () {

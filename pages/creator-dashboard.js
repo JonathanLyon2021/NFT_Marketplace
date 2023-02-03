@@ -10,7 +10,6 @@ export default function CreatorDashboard() {
 	const [nfts, setNfts] = useState([]);
 	const [sold, setSold] = useState([]);
 
-	const [loadingState, setLoadingState] = useState("not-loaded");
 	useEffect(() => {
 		loadNFTs();
 	}, []);
@@ -58,7 +57,6 @@ export default function CreatorDashboard() {
 		const soldItems = items.filter((i) => i.sold);
 		setSold(soldItems);
 		setNfts(items);
-		setLoadingState("loaded");
 	}
 	return (
 		<div>
@@ -74,9 +72,7 @@ export default function CreatorDashboard() {
 							<div className="p-4 bg-black">
 								<p className="text-2xl font-bold text-white">
 									Price - {nft.price} Eth
-									
 								</p>
-								
 							</div>
 						</div>
 					))}
@@ -107,4 +103,3 @@ export default function CreatorDashboard() {
 		</div>
 	);
 }
-
