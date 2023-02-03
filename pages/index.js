@@ -109,12 +109,12 @@ export default function Home() {
 								key={i}
 								className="border shadow rounded-xl overflow-hidden"
 							>
-								<Image
+								<img
 									alt="nft"
 									src={nft.image}
 									style={{
-										width: "350px",
-										height: "225px",
+										width: "285px",
+										height: "265px",
 									}}
 									width={350}
 									height={350}
