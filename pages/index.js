@@ -20,7 +20,7 @@ export default function Home() {
 
 	async function loadNFTs() {
 		//const provider = new ethers.providers.JsonRpcProvider(); //used for local hardhat
-		const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
+		const INFURA_PROJECT_ID = "460a2af81be44b31aed0e928f26cbc53";
 		const infuraProvider = new providers.InfuraProvider(
 			"goerli",
 			INFURA_PROJECT_ID
@@ -114,7 +114,7 @@ export default function Home() {
 									src={nft.image}
 									style={{
 										width: "350px",
-										height: "350px",
+										height: "225px",
 									}}
 									width={350}
 									height={350}

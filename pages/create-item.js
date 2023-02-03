@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function CreateItem() {
 	const fileUpload = useRef(null);
 	const apiKey =
-		"add key here";
+		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGUwZGY2N0QwMDE3MjVlMDNGNzk1MzRBODVGNWJiYTVBYjE2Y2M2YTYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3NTM1NDc4NzgwMiwibmFtZSI6Ik5ITGRhcHAifQ.BfZx5RwpIC6V2s5jFRngDVBa3hUzE6CM6tBNSp3mH74";
 	const client = new NFTStorage({ token: apiKey });
 	const [fileUrl, setFileUrl] = useState(null);
 	const [formInput, updateFormInput] = useState({
@@ -45,7 +45,9 @@ export default function CreateItem() {
 		}
 	}
 
-	{/*creates item and saves it to ipfs(nft.storage)*/}
+	{
+		/*creates item and saves it to ipfs(nft.storage)*/
+	}
 	async function createItem() {
 		const { name, description, price } = formInput;
 		if (!name || !description || !price || !fileUrl) {
@@ -313,8 +315,8 @@ export default function CreateItem() {
 					<h1 className="flex justify-center">
 						<b>Step 2 :</b>
 						<font>
-							Confirm wallet transaction in order to
-							list the NFT on the Marketplace
+							Confirm wallet transaction in order to list the NFT
+							on the Marketplace
 						</font>
 					</h1>
 					<br></br>
