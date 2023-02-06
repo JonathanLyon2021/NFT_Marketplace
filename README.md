@@ -37,8 +37,8 @@ This was my first time implementing Next.js, Tailwind CSS, and Hardhat. Also dep
 1. Clone the project from [GitHub](github.com)
 2. Create a dotenv file in the root of the project
 3. Provide the required environment variables inside of a dotenv file with the variables named as shown in the parenthesis (NEXT_PUBLIC_PRIVATE_KEY, NEXT_PUBLIC_INFURA_API_KEY, NEXT_PUBLIC_NFT_STORAGE_API_KEY) -> which are essentially your [Private Key](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key), your [Infura API Key](infura.io), & your [nft.storage API Key](https://nft.storage/)
-4. Install the packages: `npm i`                                                                                                                   <img src="./public/npmList.jpg">
-5. run the command: `npm run dev`
+4. Install the packages: `npm i`                                                                                                                   
+5. run the command: `npm run dev` <img src="./public/npmList.jpg">
 6. Open your browser and type in `localhost:3000` in your address bar, go to the browser to interact.
 7. The Dapp is up and running, Sweet!
 8. Finally, Create an NFT nad then list it for sale on the Marketplace! 
