@@ -1,6 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-waffle");
-const fs = require("fs");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {

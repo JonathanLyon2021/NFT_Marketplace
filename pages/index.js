@@ -1,13 +1,12 @@
-import { ethers, providers } from "ethers";
+import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Web3Modal from "web3modal";
 import { nftAddress, nftMarketAddress } from "../config";
 import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Image from "next/image";
 import "./create-item.js";
 
 export default function Home() {
@@ -20,22 +19,30 @@ export default function Home() {
 
 	async function loadNFTs() {
 		//const provider = new ethers.providers.JsonRpcProvider(); //used for local hardhat
-		const INFURA_PROJECT_ID = "460a2af81be44b31aed0e928f26cbc53";
-		const infuraProvider = new providers.InfuraProvider(
+		const INFURA_API_KEY = process.env.NEXT_PUBLIC_PROJECT_ID;
+		
+		const provider = new ethers.providers.InfuraProvider(
 			"goerli",
-			INFURA_PROJECT_ID
+			process.env.INFURA_API_KEY
 		);
+		//console.log("INFURA_PROJECT_ID: ", INFURA_PROJECT_ID);
+		//console.log("INFURA_PROJECT_ID: ", INFURA_PROJECT_ID[0]);
+		// const infuraProvider = new providers.InfuraProvider(
+		// 	"goerli",
+		// 	INFURA_PROJECT_ID
+		// );
+		//console.log("infuraProvider: ", infuraProvider);
 		const tokenContract = new ethers.Contract(
 			nftAddress,
 			NFT.abi,
-			infuraProvider
-			//provider   /used for local hardhat
+			//infuraProvider
+			provider   //used for local hardhat
 		);
 		const marketContract = new ethers.Contract(
 			nftMarketAddress,
 			Market.abi,
-			infuraProvider
-			//provider    /used for local hardhat
+			//infuraProvider
+			provider    //used for local hardhat
 		);
 		const data = await marketContract.fetchMarketItems();
 		//this is a json representation from ipfs for instanceof(description, image, name, etc.)
