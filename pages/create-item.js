@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function CreateItem() {
 	const fileUpload = useRef(null);
 	const apiKey =
-		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGUwZGY2N0QwMDE3MjVlMDNGNzk1MzRBODVGNWJiYTVBYjE2Y2M2YTYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3NTM1NDc4NzgwMiwibmFtZSI6Ik5ITGRhcHAifQ.BfZx5RwpIC6V2s5jFRngDVBa3hUzE6CM6tBNSp3mH74";
+		process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY;
 	const client = new NFTStorage({ token: apiKey });
 	const [fileUrl, setFileUrl] = useState(null);
 	const [formInput, updateFormInput] = useState({
