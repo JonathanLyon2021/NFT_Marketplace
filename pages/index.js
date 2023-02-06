@@ -19,30 +19,19 @@ export default function Home() {
 
 	async function loadNFTs() {
 		//const provider = new ethers.providers.JsonRpcProvider(); //used for local hardhat
-		const INFURA_API_KEY = process.env.NEXT_PUBLIC_PROJECT_ID;
-		
 		const provider = new ethers.providers.InfuraProvider(
 			"goerli",
 			process.env.INFURA_API_KEY
 		);
-		//console.log("INFURA_PROJECT_ID: ", INFURA_PROJECT_ID);
-		//console.log("INFURA_PROJECT_ID: ", INFURA_PROJECT_ID[0]);
-		// const infuraProvider = new providers.InfuraProvider(
-		// 	"goerli",
-		// 	INFURA_PROJECT_ID
-		// );
-		//console.log("infuraProvider: ", infuraProvider);
 		const tokenContract = new ethers.Contract(
 			nftAddress,
 			NFT.abi,
-			//infuraProvider
-			provider   //used for local hardhat
+			provider   //used for local hardhat also
 		);
 		const marketContract = new ethers.Contract(
 			nftMarketAddress,
 			Market.abi,
-			//infuraProvider
-			provider    //used for local hardhat
+			provider    //used for local hardhat also
 		);
 		const data = await marketContract.fetchMarketItems();
 		//this is a json representation from ipfs for instanceof(description, image, name, etc.)

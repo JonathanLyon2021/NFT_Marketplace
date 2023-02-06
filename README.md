@@ -39,10 +39,28 @@ This was my first time implementing Next.js, Tailwind CSS, and Hardhat. Also dep
 3. Provide the required environment variables inside of a dotenv file with the variables named as shown in the parenthesis (NEXT_PUBLIC_PRIVATE_KEY, NEXT_PUBLIC_INFURA_API_KEY, NEXT_PUBLIC_NFT_STORAGE_API_KEY) -> which are essentially your [Private Key](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key), your [Infura API Key](infura.io), & your [nft.storage API Key](https://nft.storage/)
 4. Install the packages: `npm i` <img src="./pages/npmList.jpg">
 5. run the command: `npm run dev`
-6. Open your browser and type in `localhost:3000` in your address bar.
-7. The Dapp is up and running! Sweeeeeeeeeeeeeet!
-8. Finally, Create an NFT nad then list it for sale on the Marketplace!
+6. Open your browser and type in `localhost:3000` in your address bar, go to the browser to interact.
+7. The Dapp is up and running, Sweet!
+8. Finally, Create an NFT nad then list it for sale on the Marketplace! 
 
+# Setting up the project - in Hardhat(Extra steps required for this method, Not Recommended)
+This project can be run on hardhat but sometimes hardhat can be finnicky. Anyway, if you wish to give it a shot. Here are the insrtuctions.
+1. Open a terminal nad go to the directory you cloned the project in.
+2. Provide the required environment variables inside of a dotenv file with the variables named as shown in the parenthesis (NEXT_PUBLIC_PRIVATE_KEY, NEXT_PUBLIC_INFURA_API_KEY, NEXT_PUBLIC_NFT_STORAGE_API_KEY) -> which are essentially your [Private Key](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key), your [Infura API Key](infura.io), & your [nft.storage API Key](https://nft.storage/)
+3. Run the command `npx hardhat node`
+4. Open another terminal in the same directory in order to deploy the contracts; run the command `npx hardhat run scripts/deploy.js --network localhost`
+5. Copy the addresses from the terminal and overwrite the contract addresses in the config file.
+6. Go to index.js and comment OUT lines 22 through 25 (switching provider).
+7. Comment IN line 21 (new provider).
+8. Open a new terminal in the same directory and run the command `npm run dev`.
+9. Open your browser and type in `localhost:3000` in your address bar, go to the browser to interact.
+10. The Dapp is up and running, Sweet!
+11. Finally, Create an NFT nad then list it for sale on the Marketplace!
+
+# Unit Testing
+1. Go to the directory where you cloned the project in a brand new terminal window.
+2. Run the command `npx hardhat test test\market.test.js`
+3. You can see all the test cases described in the terminal output, all tests pass. ;-)
 
 # 1. Smart Contracts
 #### Security
