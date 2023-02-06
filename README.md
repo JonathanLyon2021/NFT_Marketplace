@@ -33,13 +33,7 @@ This was my first time implementing Next.js, Tailwind CSS, and Hardhat. Also dep
 - [React Toastify](https://github.com/fkhadra/react-toastify#readme)
 - [Solidity Coverage](https://www.npmjs.com/package/solidity-coverage)
 
-# Setting up the Project
 
-1. Clone the project from GitHub
-2. Create dotenv file in the root of the project
-3. Provide required env variables
-4. install packages
-5.
 
 
 # 1. Smart Contracts
