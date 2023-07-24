@@ -44,7 +44,7 @@ This was my first time implementing Next.js, Tailwind CSS, and Hardhat. Also dep
 7. The Dapp is up and running, Sweet! <br>
 8. Finally, Create an NFT nad then list it for sale on the Marketplace! 
 
-# Setting up the project - in Hardhat(Extra steps required for this method, Not Recommended)
+# Setting up the project in Hardhat((Optional)- Extra steps required for this method, Not Recommended)
 This project can be run on hardhat but sometimes hardhat can be finnicky. Anyway, if you wish to give it a shot. Here are the insrtuctions.
 1. Open a terminal nad go to the directory you cloned the project in.
 2. Provide the required environment variables inside of a dotenv file with the variables named as shown in the parenthesis (NEXT_PUBLIC_PRIVATE_KEY, NEXT_PUBLIC_INFURA_API_KEY, NEXT_PUBLIC_NFT_STORAGE_API_KEY) -> which are essentially your [Private Key](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key), your [Infura API Key](infura.io), & your [nft.storage API Key](https://nft.storage/)
